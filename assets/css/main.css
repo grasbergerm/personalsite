@@ -2449,7 +2449,7 @@
 /* Header */
 
 	#header {
-		background-image: url(images/pic04.jpg);
+		background-image: url(../images/pic04.jpg);
 		color: #121d45;
 		height: 100%;
 		position: fixed;
