@@ -1893,7 +1893,7 @@
 		input[type="radio"]:checked + label:before {
 			background: #989898;
 			border-color: #989898;
-			color: #345f99;
+			color: #16588e;
 			content: '\f00c';
 		}
 
@@ -2094,7 +2094,7 @@
 				ul.feature-icons li:before {
 					background: #555b5e;
 					border-radius: 100%;
-					color: #345f99;
+					color: #16588e;
 					display: block;
 					height: 2.5em;
 					left: 0;
@@ -2280,7 +2280,7 @@
 		background-color: #989898;
 		border-radius: 5px;
 		border: 0;
-		color: #345f99 !important;
+		color: #16588e !important;
 		cursor: pointer;
 		display: inline-block;
 		font-weight: 700;
@@ -2297,7 +2297,7 @@
 		input[type="button"]:hover,
 		.button:hover {
 			background-color: #a5a5a5;
-			color: #345f99 !important;
+			color: #16588e !important;
 		}
 
 		input[type="submit"]:active,
@@ -2380,7 +2380,7 @@
 		input[type="button"].special,
 		.button.special {
 			background-color: #555b5e;
-			color: #345f99 !important;
+			color: #16588e !important;
 		}
 
 			input[type="submit"].special:hover,
@@ -2450,7 +2450,7 @@
 
 	#header {
 		background-image: url(../../images/pic04.jpg);
-		color: #345f99;
+		color: #16588e;
 		height: 100%;
 		position: fixed;
 		text-align: center;
@@ -2460,23 +2460,23 @@
 	}
 
 		#header h1, #header h2, #header h3, #header h4, #header h5, #header h6 {
-			color: #345f99;
+			color: #16588e;
 		}
 
 			#header h1 a, #header h2 a, #header h3 a, #header h4 a, #header h5 a, #header h6 a {
-				color: #345f99;
+				color: #16588e;
 			}
 
 		#header header p {
-			color: #345f99;
+			color: #16588e;
 		}
 
 		#header a {
-			color: #345f99;
+			color: #16588e;
 		}
 
 			#header a:hover {
-				color: #345f99 !important;
+				color: #16588e !important;
 			}
 
 		#header > header {
@@ -2495,7 +2495,7 @@
 			}
 
 			#header > header p {
-				color: #345f99;
+				color: #16588e;
 				font-style: italic;
 				margin: 1em 0 0 0;
 			}
@@ -2513,7 +2513,7 @@
 			}
 
 				#header > footer .icons li a {
-					color: #345f99;
+					color: #16588e;
 				}
 
 		#header > nav ul {
@@ -2534,7 +2534,7 @@
 					-ms-transition: none;
 					transition: none;
 					border: 0;
-					color: #345f99 !important;
+					color: #16588e !important;
 					display: block;
 					padding: 0.85em 0;
 					text-decoration: none;
@@ -2810,7 +2810,7 @@
 
 					#titleBar .toggle:before {
 						background: #555b5e;
-						color: #345f99;
+						color: #16588e;
 						content: '\f0c9';
 						display: block;
 						font-size: 18px;
