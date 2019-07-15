@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e # exit if anything fails
+
+# checkout new code
+mkdir -p /var/www/sites/personalsite
+GIT_WORK_TREE=/var/www/sites/personalsite git checkout -f
+
+# update static files and database
+python3 /var/www/sites/personalsite/manage.py collectstatic -y
+python3 /var/www/sites/personalsite/manage.py migrate -y
+
+# bounce web app
+touch /var/www/www_grasbergerm_com_wsgi.py
