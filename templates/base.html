@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<!--
+	Read Only by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+	<title>Matt Grasberger</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+	<!-- Header -->
+	<section id="header">
+		<header>
+			<span class="image avatar"><img src="images/avatar.jpg" alt="" /></span>
+			<h1 id="logo"><a href="/">Matt Grasberger</a></h1>
+			<p>Programmer, amateur photographer,
+				<br /> and car enthusiast
+			</p>
+		</header>
+		<nav id="nav">
+			<ul>
+				<li><a {% if request.url_rule.endpoint == "home" %} href="#one" class="active" {% else %} href="/#one" {% endif %}>About</a></li>
+				<li><a {% if request.url_rule.endpoint == "home" %} href="#two" {% else %} href="/#two" {% endif %}>Things I Can Do</a></li>
+				<li><a {% if request.url_rule.endpoint == "home" %} href="#three" {% else %} href="/#three" {% endif %}>Projects</a></li>
+				<li><a href="MatthewGrasberger.pdf">Résumé</a></li>
+				<li><a href="blogs">Blogs</a></li>
+			</ul>
+		</nav>
+		<footer>
+			<ul class="icons">
+				<li><a href="https://www.linkedin.com/in/matthew-grasberger-b8a037105" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+				<li><a href="https://github.com/grasbergerm" class="icon fa-github"><span class="label">Github</span></a></li>
+				<li><a href="https://www.flickr.com/photos/grasbergerm/" class="icon fa-flickr"><span class="label">Flickr</span></a></li>
+				<li><a href="mailto:grasbergerm@gmail.com" class="icon fa-envelope"><span class="label">Email</span></a></li>
+			</ul>
+		</footer>
+	</section>
+
+	<!-- Wrapper -->
+	<div id="wrapper">
+
+		<!-- Main -->
+		<div id="main">
+
+			{% block content %}{% endblock %}
+
+			<!-- Footer -->
+			<section id="footer">
+				<div class="container">
+					<ul class="copyright">
+						<li>&copy; Matt Grasberger. All rights reserved.</li>
+						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</section>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollzer.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/skel.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+		<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- One -->
+<section id="one">
+	<div class="container">
+		<header class="major">
+			<h2>Stuff I've Written</h2>
+		</header>
+		{% set bmw_cleveland = 'document/d/e/2PACX-1vTXNhnud5MGUwnE3oxq_l85nRDiFz5iaxdBdbQfEKP7A1N-6xF8zvn06xkUs9ZhpTLmEQCM5jJ7aKOu/pub?embedded=true' %}
+		June 15th, 2019: <a href="{{ 'blog?doc_string=%s'%bmw_cleveland|quote_plus }}">BMW Cleveland Delivery</a>
+	</div>
+</section>
+{% endblock %}
