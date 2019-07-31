@@ -1,0 +1,16 @@
+Dear ${ADDRESSEE},
+
+We have been asked by ${CHILD_FULL_NAME}’s parent to set up a Hopecam Connection between ${CHILD_FIRST_NAME} and ${SCHOOL_NAME} while he is in treatment.
+
+Hopecam is a non-profit charity that helps children with cancer and other life threatening conditions use technology to stay connected with friends and classmates. Our goal is to help overcome the social isolation of children in treatment.
+
+Hopecam gives the child a tablet computer, downloads Zoom and provides Internet access if the family is without.  We then work with the schools to facilitate a regular Zoom connection between the child and school. If needed, we can provide your school with a webcam.  If ${SCHOOL_NAME} has limited resources, we can lend you a refurbished laptop. Thanks to the generosity of our donors, Hopecam can provide all of its services without charge to the child.
+
+Who would be the best point(s) of contact at your school to coordinate and set up the connection with ${CHILD_FIRST_NAME}?
+
+I am happy to answer any questions you may have about the technical, logistical, or emotional aspects of setting up a Hopecam connection. You can also view a video about Hopecam here: www.hopecam.org/stories/.
+
+I look forward to working with your school to keep ${CHILD_FIRST_NAME} connected.
+
+Kindest Regards,
+${YOUR_NAME}

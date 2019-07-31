@@ -1,0 +1,25 @@
+{% extends "hopecam_base.html" %}
+
+{% block content %}
+<h1>Email</h1>
+    <div>
+        To: {{ to_email }}
+        <br>
+
+        Message:
+        {% for para in message %}
+            <p>{{para}}</p>
+        {% endfor %}
+    </div>
+<form action="{{ url_for('send_email_form') }}" method="post" novalidate>
+    {{ form.csrf_token }}
+    <p>{{ form.submit() }}</p>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</form>
+{% endblock %}
