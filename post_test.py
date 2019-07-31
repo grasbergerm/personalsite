@@ -61,9 +61,6 @@ def generate_email_params(username, apricot_username, apricot_password):
 
     report_json, session = get_report_json(session, username)
 
-    # List of tuples containing addressee and message
-    emails = []
-
     # Record each of the report ids from the JSON
     for ids in report_json['dataset']['groups']['All Rows']['document_ids']:
         # Report ID for the first record in the row
@@ -114,11 +111,12 @@ def generate_email_params(username, apricot_username, apricot_password):
 
         principal_email = read_value(soup, "field_555")
 
-        emails.append(
-            create_message(username, best_school_contact_full_name, principal_full_name, best_school_contact_email,
-                           principal_email, child_full_name, child_first_name, school_name, child_pronoun,
-                           child_name_for_email_subject))
-    return emails, session
+        email_tup = create_message(username, best_school_contact_full_name, principal_full_name,
+                                   best_school_contact_email,
+                                   principal_email, child_full_name, child_first_name, school_name, child_pronoun,
+                                   child_name_for_email_subject)
+
+        return email_tup, session
 
 
 def get_report_list(session):

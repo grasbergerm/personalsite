@@ -61,16 +61,14 @@ def send_email_form():
     apricot_password = session.get('apricot_password')
     form = SendEmailForm()
     try:
-        list_of_emails, requests_session = \
+        email_tup, requests_session = \
             post_test.generate_email_params(username, apricot_username, apricot_password)
     except KeyError as ke:
         return render_template('send_email_content.html', to_email="No emails left", message="", form=form)
     except IndexError as ie:
         flash('There was a problem with your name or apricot credentials, please check your entries and try again.')
         return redirect(url_for('hopecam_form'))
-    email_address = get_first_item(list_of_emails)[0]
-    email_message = get_first_item(list_of_emails)[1]
-    email_subject = get_first_item(list_of_emails)[2]
+    email_address, email_message, email_subject = email_tup
 
     if form.validate_on_submit():
         outlook_username = session.get('outlook_username')
