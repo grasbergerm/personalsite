@@ -1,6 +1,6 @@
 Dear ${ADDRESSEE},
 
-We have been asked by ${CHILD_FULL_NAME}’s parent to set up a Hopecam Connection between ${CHILD_FIRST_NAME} and ${SCHOOL_NAME} while he is in treatment.
+We have been asked by ${CHILD_FULL_NAME}’s parent to set up a Hopecam Connection between ${CHILD_FIRST_NAME} and ${SCHOOL_NAME} while ${CHILD_PRONOUN} is in treatment.
 
 Hopecam is a non-profit charity that helps children with cancer and other life threatening conditions use technology to stay connected with friends and classmates. Our goal is to help overcome the social isolation of children in treatment.
 

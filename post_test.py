@@ -35,7 +35,7 @@ def read_template(filename):
 
 def create_message(your_name, best_school_contact_full_name, principal_full_name,
                    best_school_contact_email, principal_email, child_full_name, child_first_name,
-                   school_name):
+                   school_name, child_pronoun, child_name_for_email_subject):
     message_template = read_template('message.txt')
 
     # create the addressee based on which contact is filled out in the application
@@ -48,8 +48,9 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
     # add in the values to the message template
     message = message_template.substitute(YOUR_NAME=your_name, ADDRESSEE=addressee,
                                           CHILD_FULL_NAME=child_full_name, CHILD_FIRST_NAME=child_first_name,
-                                          SCHOOL_NAME=school_name)
-    return (list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)}))), message)
+                                          SCHOOL_NAME=school_name, CHILD_PRONOUN=child_pronoun)
+    return (list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)}))), message,
+            child_name_for_email_subject)
 
 
 def generate_email_params(username, apricot_username, apricot_password):
@@ -84,6 +85,12 @@ def generate_email_params(username, apricot_username, apricot_password):
         child_name_for_email_subject = ', '.join(
             filter(None, [child_last_name, ' '.join(filter(None, [child_first_name, child_middle_name]))]))
 
+        child_sex = read_value(soup, "field_8")
+        if child_sex == "Female":
+            child_pronoun = "she"
+        else:
+            child_pronoun = "he"
+
         school_info_form_id, school_info_url = new_email.get_url_for_school_info(report_json)
 
         response = session.get(school_info_url)
@@ -108,10 +115,10 @@ def generate_email_params(username, apricot_username, apricot_password):
         principal_email = read_value(soup, "field_555")
 
         emails.append(
-            create_message(username, best_school_contact_full_name,
-                           principal_full_name,
-                           best_school_contact_email, principal_email, child_full_name, child_first_name, school_name))
-    return emails, session, child_name_for_email_subject
+            create_message(username, best_school_contact_full_name, principal_full_name, best_school_contact_email,
+                           principal_email, child_full_name, child_first_name, school_name, child_pronoun,
+                           child_name_for_email_subject))
+    return emails, session
 
 
 def get_report_list(session):

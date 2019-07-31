@@ -61,7 +61,7 @@ def send_email_form():
     apricot_password = session.get('apricot_password')
     form = SendEmailForm()
     try:
-        list_of_emails, requests_session, child_name_for_email_subject = \
+        list_of_emails, requests_session = \
             post_test.generate_email_params(username, apricot_username, apricot_password)
     except KeyError as ke:
         return render_template('send_email_content.html', to_email="No emails left", message="", form=form)
@@ -70,13 +70,14 @@ def send_email_form():
         return redirect(url_for('hopecam_form'))
     email_address = get_first_item(list_of_emails)[0]
     email_message = get_first_item(list_of_emails)[1]
+    email_subject = get_first_item(list_of_emails)[2]
 
     if form.validate_on_submit():
         outlook_username = session.get('outlook_username')
         outlook_password = session.get('outlook_password')
         try:
             new_email.send_email(outlook_username, outlook_password, email_address, email_message,
-                                 child_name_for_email_subject)
+                                 email_subject)
         except smtplib.SMTPRecipientsRefused as sr:
             flash("No Email Receipients! Please update the Child's School Information")
             return render_template('send_email_content.html', to_email=email_address,
