@@ -3,6 +3,8 @@ import smtplib
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from datetime import datetime
+
 
 from bs4 import BeautifulSoup
 
@@ -281,7 +283,7 @@ def update_connection_status(session, username):
     field_563_last = get_input_value(soup, "field_563_last")
     field_567 = get_input_value(soup, "field_567")
     field_568 = get_input_value(soup, "field_568")
-    field_719 = get_input_value(soup, "mod_time").split(" ")[0]
+    field_719 = datetime.today().strftime('%m/%d/%Y')
     field_719_dateType = get_other_value(soup, "field_719_dateType")
     field_720 = "Intro Email Sent"
     field_720_other = get_other_value(soup, "field_720_other")

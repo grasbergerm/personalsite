@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, flash
+from flask import Flask, render_template, redirect, url_for, session, flash, Markup
 from urllib.parse import quote_plus
 from flask_basicauth import BasicAuth
 
@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
-import post_test, new_email, os
+import post_test, new_email, os, smtplib
 
 
 class HopecamForm(FlaskForm):
@@ -65,14 +65,27 @@ def send_email_form():
             post_test.generate_email_params(username, apricot_username, apricot_password)
     except KeyError as ke:
         return render_template('send_email_content.html', to_email="No emails left", message="", form=form)
+    except IndexError as ie:
+        flash('There was a problem with your name or apricot credentials, please check your entries and try again.')
+        return redirect(url_for('hopecam_form'))
     email_address = get_first_item(list_of_emails)[0]
     email_message = get_first_item(list_of_emails)[1]
 
     if form.validate_on_submit():
         outlook_username = session.get('outlook_username')
         outlook_password = session.get('outlook_password')
-        new_email.send_email(outlook_username, outlook_password, email_address, email_message,
-                             child_name_for_email_subject)
+        try:
+            new_email.send_email(outlook_username, outlook_password, email_address, email_message,
+                                 child_name_for_email_subject)
+        except smtplib.SMTPRecipientsRefused as sr:
+            flash("No Email Receipients! Please update the Child's School Information")
+            return render_template('send_email_content.html', to_email=email_address,
+                                   message=email_message.split('\n'), form=form)
+        except smtplib.SMTPException as se:
+            flash(Markup('There was a problem with your email, please check your credentials back at <a href="' +
+                         url_for('hopecam_form') + '" class="alert-link">/hopecam</a>'))
+            return render_template('send_email_content.html', to_email=email_address,
+                                   message=email_message.split('\n'), form=form)
         flash('Email sent!')
         new_email.update_connection_status(requests_session, username)
         return redirect(url_for('send_email_form'))
