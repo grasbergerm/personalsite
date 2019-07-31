@@ -1,4 +1,4 @@
-import requests, json, re, urllib.parse
+import requests, json, re, urllib.parse, os
 
 from string import Template
 from bs4 import BeautifulSoup
@@ -26,7 +26,9 @@ def read_template(filename):
     file specified by filename.
     """
 
-    with open(filename, 'r', encoding='utf-8') as template_file:
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    my_file = os.path.join(THIS_FOLDER, filename)
+    with open(my_file, 'r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()
     return Template(template_file_content)
 
