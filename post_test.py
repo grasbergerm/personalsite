@@ -35,7 +35,7 @@ def read_template(filename):
 
 def create_message(your_name, best_school_contact_full_name, principal_full_name,
                    best_school_contact_email, principal_email, child_full_name, child_first_name,
-                   school_name, child_pronoun, child_name_for_email_subject):
+                   school_name, child_pronoun):
     message_template = read_template('message.txt')
 
     # create the addressee based on which contact is filled out in the application
@@ -50,7 +50,7 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
                                           CHILD_FULL_NAME=child_full_name, CHILD_FIRST_NAME=child_first_name,
                                           SCHOOL_NAME=school_name, CHILD_PRONOUN=child_pronoun)
     return (list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)}))), message,
-            child_name_for_email_subject)
+            child_full_name)
 
 
 def generate_email_params(username, apricot_username, apricot_password):
@@ -79,8 +79,6 @@ def generate_email_params(username, apricot_username, apricot_password):
         child_middle_name = read_value(soup, "field_2_middle")
         child_last_name = read_value(soup, "field_2_last")
         child_full_name = ' '.join(filter(None, [child_first_name, child_middle_name, child_last_name]))
-        child_name_for_email_subject = ', '.join(
-            filter(None, [child_last_name, ' '.join(filter(None, [child_first_name, child_middle_name]))]))
 
         child_sex = read_value(soup, "field_8")
         if child_sex == "Female":
@@ -113,8 +111,7 @@ def generate_email_params(username, apricot_username, apricot_password):
 
         email_tup = create_message(username, best_school_contact_full_name, principal_full_name,
                                    best_school_contact_email,
-                                   principal_email, child_full_name, child_first_name, school_name, child_pronoun,
-                                   child_name_for_email_subject)
+                                   principal_email, child_full_name, child_first_name, school_name, child_pronoun)
 
         return email_tup, session
 
