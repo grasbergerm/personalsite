@@ -19,7 +19,7 @@ class HopecamForm(FlaskForm):
 
 
 class SendEmailForm(FlaskForm):
-    submit = SubmitField('Send Email')
+    send_email = SubmitField('Send Email')
 
 
 app = Flask(__name__, static_url_path='', static_folder='')

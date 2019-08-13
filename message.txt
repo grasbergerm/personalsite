@@ -1,16 +1,29 @@
-Dear ${ADDRESSEE},
+<div class="PlainText">Dear ${ADDRESSEE},<br>
+<br>
+We have been asked by ${CHILD_FULL_NAME}’s parent to set up a Hopecam Connection between ${CHILD_FIRST_NAME} and ${SCHOOL_NAME} while ${CHILD_PRONOUN} is in treatment.<br>
+<br>
+Hopecam is a non-profit charity that helps children with cancer and other life threatening conditions use technology to stay connected with friends and classmates. Our goal is to help overcome the social isolation of children in treatment.<br>
+<br>
+Hopecam gives the child a tablet computer, downloads Zoom and provides Internet access if the family is without.&nbsp; We then work with the schools to facilitate a regular Zoom connection between the child and school. If needed, we can provide your school with a webcam.&nbsp; If All Souls Catholic School has limited resources, we can lend you a refurbished laptop. Thanks to the generosity of our donors, Hopecam can provide all of its services without charge to the child.<br>
+<br>
+Who would be the best point(s) of contact at your school to coordinate and set up the connection with ${CHILD_FIRST_NAME}?<br>
+<br>
+I am happy to answer any questions you may have about the technical, logistical, or emotional aspects of setting up a Hopecam connection. You can also view a video about Hopecam here: <a href="http://www.hopecam.org/stories/" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable">www.hopecam.org/stories/</a>.<br>
+<br>
+I look forward to working with your school to keep ${CHILD_FIRST_NAME} connected.<br>
+<br>
+Kindest Regards,<br>
+${YOUR_NAME}<br>
+Hopecam Volunteer<br>
+<br>
+Connecting Children to Life<br>
+12100 Sunset Hills Road, Suite C-10<br>
+Reston, VA&nbsp; 20190<br>
+Phone: 703-364-5609<br>
+New Fax: 571-375-7157<br>
+<br>
+<a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__www.hopecam.org_&amp;d=AwMFAg&amp;c=Rm3hRyxmymJgpBTCyRDm7Q&amp;r=44fYiJqPbM7Y6-P_3HoJHk5ZdDpCCBEwq-sSuoT4Gek&amp;m=RxsiN_Fl3KRcljv230nHmzMLocBGmsqrtP1HdJINQO0&amp;s=TczxxNunLtq1jZlXpF7Dm1NdYDD4mc-t20n7XXjHX7U&amp;e=" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable"><span style="font-size:10.0pt; font-family:&quot;Garamond&quot;,serif; color:#0563C1; background:white">www.hopecam.org</span></a>
+<br>
+Follow us on <a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__www.facebook.com_Hopecam&amp;d=AwMFAg&amp;c=Rm3hRyxmymJgpBTCyRDm7Q&amp;r=44fYiJqPbM7Y6-P_3HoJHk5ZdDpCCBEwq-sSuoT4Gek&amp;m=RxsiN_Fl3KRcljv230nHmzMLocBGmsqrtP1HdJINQO0&amp;s=gRBpuAoaMxjSAfX60LsQ4b4a5536ZEUc2BRJD7dcyO0&amp;e=" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable"><span style="font-size:10.0pt; font-family:&quot;Garamond&quot;,serif; color:#0563C1">Facebook</span></a>!
 
-We have been asked by ${CHILD_FULL_NAME}’s parent to set up a Hopecam Connection between ${CHILD_FIRST_NAME} and ${SCHOOL_NAME} while ${CHILD_PRONOUN} is in treatment.
-
-Hopecam is a non-profit charity that helps children with cancer and other life threatening conditions use technology to stay connected with friends and classmates. Our goal is to help overcome the social isolation of children in treatment.
-
-Hopecam gives the child a tablet computer, downloads Zoom and provides Internet access if the family is without.  We then work with the schools to facilitate a regular Zoom connection between the child and school. If needed, we can provide your school with a webcam.  If ${SCHOOL_NAME} has limited resources, we can lend you a refurbished laptop. Thanks to the generosity of our donors, Hopecam can provide all of its services without charge to the child.
-
-Who would be the best point(s) of contact at your school to coordinate and set up the connection with ${CHILD_FIRST_NAME}?
-
-I am happy to answer any questions you may have about the technical, logistical, or emotional aspects of setting up a Hopecam connection. You can also view a video about Hopecam here: www.hopecam.org/stories/.
-
-I look forward to working with your school to keep ${CHILD_FIRST_NAME} connected.
-
-Kindest Regards,
-${YOUR_NAME}
+</div>

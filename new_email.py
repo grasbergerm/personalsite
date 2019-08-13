@@ -23,7 +23,7 @@ def send_email(outlook_username, outlook_password, to_address, message, child_na
     msg['Subject'] = "Hopecam Connection for " + child_name_for_email_subject
 
     # add in the message body
-    msg.attach(MIMEText(message, 'plain'))
+    msg.attach(MIMEText(message, 'html'))
 
     # prompt to send message
 

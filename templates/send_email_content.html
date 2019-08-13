@@ -8,11 +8,11 @@
 
         Message:
         {% for para in message %}
-            <p>{{para}}</p>
+            <p>{{para|safe}}</p>
         {% endfor %}
     </div>
 <form action="{{ url_for('send_email_form') }}" method="post" novalidate>
     {{ form.csrf_token }}
-    <p>{{ form.submit() }}</p>
+    <p>{{ form.send_email() }}</p>
 </form>
 {% endblock %}

@@ -34,7 +34,7 @@ def read_template(filename):
 
 
 def create_message(your_name, best_school_contact_full_name, principal_full_name,
-                   best_school_contact_email, principal_email, child_full_name, child_first_name,
+                   best_school_contact_email, principal_email, child_first_name, child_last_name,
                    school_name, child_pronoun):
     message_template = read_template('message.txt')
 
@@ -47,10 +47,11 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
 
     # add in the values to the message template
     message = message_template.substitute(YOUR_NAME=your_name, ADDRESSEE=addressee,
-                                          CHILD_FULL_NAME=child_full_name, CHILD_FIRST_NAME=child_first_name,
+                                          CHILD_FULL_NAME=' '.join([child_first_name, child_last_name]),
+                                          CHILD_FIRST_NAME=child_first_name,
                                           SCHOOL_NAME=school_name, CHILD_PRONOUN=child_pronoun)
     return (list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)}))), message,
-            child_full_name)
+            ' '.join([child_first_name, child_last_name[0] + '.']))
 
 
 def generate_email_params(username, apricot_username, apricot_password):
@@ -111,7 +112,7 @@ def generate_email_params(username, apricot_username, apricot_password):
 
         email_tup = create_message(username, best_school_contact_full_name, principal_full_name,
                                    best_school_contact_email,
-                                   principal_email, child_full_name, child_first_name, school_name, child_pronoun)
+                                   principal_email, child_first_name, child_last_name, school_name, child_pronoun)
 
         return email_tup, session
 
