@@ -33,6 +33,10 @@ def read_template(filename):
     return Template(template_file_content)
 
 
+def red_wrap(your_name):
+    return '{}{}{}'.format('<font color="red">', your_name, "</font>")
+
+
 def create_message(your_name, best_school_contact_full_name, principal_full_name,
                    best_school_contact_email, principal_email, child_first_name, child_last_name,
                    school_name, child_pronoun):
@@ -50,8 +54,12 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
                                           CHILD_FULL_NAME=' '.join([child_first_name, child_last_name]),
                                           CHILD_FIRST_NAME=child_first_name,
                                           SCHOOL_NAME=school_name, CHILD_PRONOUN=child_pronoun)
+    marked_message = message_template.substitute(YOUR_NAME=red_wrap(your_name), ADDRESSEE=red_wrap(addressee),
+                                                 CHILD_FULL_NAME=red_wrap(' '.join([child_first_name, child_last_name])),
+                                                 CHILD_FIRST_NAME=red_wrap(child_first_name),
+                                                 SCHOOL_NAME=red_wrap(school_name), CHILD_PRONOUN=red_wrap(child_pronoun))
     return (list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)}))), message,
-            ' '.join([child_first_name, child_last_name[0] + '.']))
+            ' '.join([child_first_name, child_last_name[0] + '.']), marked_message)
 
 
 def generate_email_params(username, apricot_username, apricot_password):

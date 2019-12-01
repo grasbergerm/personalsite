@@ -68,7 +68,7 @@ def send_email_form():
     except IndexError as ie:
         flash('There was a problem with your name or apricot credentials, please check your entries and try again.')
         return redirect(url_for('hopecam_form'))
-    email_address, email_message, email_subject = email_tup
+    email_address, email_message, email_subject, marked_message = email_tup
 
     if form.validate_on_submit():
         outlook_username = session.get('outlook_username')
@@ -90,7 +90,7 @@ def send_email_form():
         return redirect(url_for('send_email_form'))
 
     return render_template('send_email_content.html', to_email=email_address,
-                           message=email_message.split('\n'), form=form)
+                           message=marked_message.split('\n'), form=form)
 
 
 @app.route("/")
