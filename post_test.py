@@ -44,7 +44,12 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
 
     # create the addressee based on which contact is filled out in the application
     if best_school_contact_full_name or principal_full_name:
-        addressee = ' and '.join(filter(None, list({best_school_contact_full_name, principal_full_name})))
+        if not get_email(best_school_contact_email):
+            addressee = principal_full_name
+        elif not get_email(principal_email):
+            addressee = best_school_contact_full_name
+        else:
+            addressee = ' and '.join(filter(None, list({best_school_contact_full_name, principal_full_name})))
     else:
         raise Exception('No best school contact name or principal name found, got ' +
                         ' and '.join([best_school_contact_full_name, principal_full_name]))
@@ -55,9 +60,11 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
                                           CHILD_FIRST_NAME=child_first_name,
                                           SCHOOL_NAME=school_name, CHILD_PRONOUN=child_pronoun)
     marked_message = message_template.substitute(YOUR_NAME=red_wrap(your_name), ADDRESSEE=red_wrap(addressee),
-                                                 CHILD_FULL_NAME=red_wrap(' '.join([child_first_name, child_last_name])),
+                                                 CHILD_FULL_NAME=red_wrap(
+                                                     ' '.join([child_first_name, child_last_name])),
                                                  CHILD_FIRST_NAME=red_wrap(child_first_name),
-                                                 SCHOOL_NAME=red_wrap(school_name), CHILD_PRONOUN=red_wrap(child_pronoun))
+                                                 SCHOOL_NAME=red_wrap(school_name),
+                                                 CHILD_PRONOUN=red_wrap(child_pronoun))
     return (list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)}))), message,
             ' '.join([child_first_name, child_last_name[0] + '.']), marked_message)
 
@@ -83,7 +90,6 @@ def generate_email_params(username, apricot_username, apricot_password):
 
         # Create a lovely soup of the report response
         soup = BeautifulSoup(response.text, 'html.parser')
-
         child_first_name = read_value(soup, "field_2_first")
         child_middle_name = read_value(soup, "field_2_middle")
         child_last_name = read_value(soup, "field_2_last")
@@ -140,7 +146,7 @@ def get_report_json(session, username):
     # Get first name to identify report element
     first_name = username.split(' ')[0]
     soup = BeautifulSoup(response.text, 'html.parser')
-    pattern = re.compile(".*" + first_name + ".*")
+    pattern = re.compile(".*" + first_name + ".*(Report|Caseload).*")
     # Get link to report for username
     report_path = list(filter(lambda item: pattern.search(item.text.strip()), soup.find_all('h4')))[0].findNext('a')[
         'href']
@@ -148,9 +154,12 @@ def get_report_json(session, username):
     response = session.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     state_id = soup.find('input', id='state_id')['value']
-    section_id = \
+    sections = \
         json.loads(soup.find('script', language="JavaScript").text.split("=", 1)[1].strip().strip(";"))['report_state'][
-            'sections'][0]['id']
+            'sections']
+    for section in sections:
+        if section['name'] == 'Awaiting School Intro Email ':
+            section_id = section['id']
     # Setup for the report post
     url = "https://apricot.socialsolutions.com/report/refresh/reloading/false"
     session.headers.update({'Referer': "https://apricot.socialsolutions.com/bulletins/list"})
