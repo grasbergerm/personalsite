@@ -42,17 +42,8 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
                    school_name, child_pronoun):
     message_template = read_template('message.txt')
 
-    # create the addressee based on which contact is filled out in the application
-    if best_school_contact_full_name or principal_full_name:
-        if not get_email(best_school_contact_email):
-            addressee = principal_full_name
-        elif not get_email(principal_email):
-            addressee = best_school_contact_full_name
-        else:
-            addressee = ' and '.join(filter(None, list({best_school_contact_full_name, principal_full_name})))
-    else:
-        raise Exception('No best school contact name or principal name found, got ' +
-                        ' and '.join([best_school_contact_full_name, principal_full_name]))
+    addressee = get_addressee(best_school_contact_email, best_school_contact_full_name, principal_email,
+                              principal_full_name)
 
     # add in the values to the message template
     message = message_template.substitute(YOUR_NAME=your_name, ADDRESSEE=addressee,
@@ -65,8 +56,34 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
                                                  CHILD_FIRST_NAME=red_wrap(child_first_name),
                                                  SCHOOL_NAME=red_wrap(school_name),
                                                  CHILD_PRONOUN=red_wrap(child_pronoun))
-    return (list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)}))), message,
-            ' '.join([child_first_name, child_last_name[0] + '.']), marked_message)
+
+    email_address = get_email_address(best_school_contact_email, principal_email)
+
+    child_name_for_subject = get_child_name_for_subject(child_first_name, child_last_name)
+    return email_address, message, child_name_for_subject, marked_message
+
+
+def get_addressee(best_school_contact_email, best_school_contact_full_name, principal_email, principal_full_name):
+    # create the addressee based on which contact is filled out in the application
+    if best_school_contact_full_name or principal_full_name:
+        if not get_email(best_school_contact_email):
+            addressee = principal_full_name
+        elif not get_email(principal_email):
+            addressee = best_school_contact_full_name
+        else:
+            addressee = ' and '.join(filter(None, list({best_school_contact_full_name, principal_full_name})))
+    else:
+        raise Exception('No best school contact name or principal name found, got ' +
+                        ' and '.join([best_school_contact_full_name, principal_full_name]))
+    return addressee
+
+
+def get_email_address(best_school_contact_email, principal_email):
+    return list(filter(None, list({get_email(best_school_contact_email), get_email(principal_email)})))
+
+
+def get_child_name_for_subject(child_first_name, child_last_name):
+    return ' '.join([child_first_name, child_last_name[0] + '.'])
 
 
 def generate_email_params(username, apricot_username, apricot_password):

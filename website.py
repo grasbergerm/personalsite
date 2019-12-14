@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
-import post_test, new_email, os, smtplib
+import scrape_reports, new_email, os, smtplib
 
 
 class HopecamForm(FlaskForm):
@@ -62,7 +62,7 @@ def send_email_form():
     form = SendEmailForm()
     try:
         email_tup, requests_session = \
-            post_test.generate_email_params(username, apricot_username, apricot_password)
+            scrape_reports.generate_email_params(username, apricot_username, apricot_password)
     except KeyError as ke:
         return render_template('send_email_content.html', to_email="No emails left", message="", form=form)
     except IndexError as ie:
@@ -89,7 +89,7 @@ def send_email_form():
         new_email.update_connection_status(requests_session, username)
         return redirect(url_for('send_email_form'))
 
-    return render_template('send_email_content.html', to_email=email_address,
+    return render_template('send_email_content.html', to_email=email_address, subject=email_subject,
                            message=marked_message.split('\n'), form=form)
 
 

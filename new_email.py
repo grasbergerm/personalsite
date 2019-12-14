@@ -57,9 +57,9 @@ def get_input_value(soup, field_id):
 
 
 def update_connection_status(session, username):
-    import post_test
+    import scrape_reports
 
-    report_json, session = post_test.get_report_json(session, username)
+    report_json, session = scrape_reports.get_report_json(session, username)
 
     connection_status_form_id, connection_status_url = get_url_for_connection_status(report_json)
 
