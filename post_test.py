@@ -146,7 +146,7 @@ def get_report_json(session, username):
     # Get first name to identify report element
     first_name = username.split(' ')[0]
     soup = BeautifulSoup(response.text, 'html.parser')
-    pattern = re.compile(".*" + first_name + ".*(Report|Caseload).*")
+    pattern = re.compile(".*" + first_name + "'s (Report|Caseload).*")
     # Get link to report for username
     report_path = list(filter(lambda item: pattern.search(item.text.strip()), soup.find_all('h4')))[0].findNext('a')[
         'href']
