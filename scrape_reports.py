@@ -96,56 +96,73 @@ def generate_email_params(username, apricot_username, apricot_password):
 
     # Record each of the report ids from the JSON
     for ids in report_json['dataset']['groups']['All Rows']['document_ids']:
-        # Report ID for the first record in the row
-        report_id = ids[next(iter(ids.keys()))]
-
-        # Setup for full report request
-        url = "https://apricot.socialsolutions.com/document/edit/id/" + report_id
-        session.headers.update({'Referer': "https://apricot.socialsolutions.com/auth/approved"})
-
-        response = session.get(url)
+        response = get_child_report(ids, session)
 
         # Create a lovely soup of the report response
         soup = BeautifulSoup(response.text, 'html.parser')
-        child_first_name = read_value(soup, "field_2_first")
-        child_middle_name = read_value(soup, "field_2_middle")
-        child_last_name = read_value(soup, "field_2_last")
-        child_full_name = ' '.join(filter(None, [child_first_name, child_middle_name, child_last_name]))
 
-        child_sex = read_value(soup, "field_8")
-        if child_sex == "Female":
-            child_pronoun = "she"
-        else:
-            child_pronoun = "he"
+        child_first_name, child_last_name, child_pronoun = save_child_info(soup)
 
         school_info_form_id, school_info_url = new_email.get_url_for_school_info(report_json)
 
         response = session.get(school_info_url)
+
         soup = BeautifulSoup(response.text, 'html.parser')
 
         school_name = read_value(soup, "field_541")
 
-        best_school_contact_first_name = read_value(soup, "field_573_first")
-        best_school_contact_middle_name = read_value(soup, "field_573_middle")
-        best_school_contact_last_name = read_value(soup, "field_573_last")
-        best_school_contact_full_name = ' '.join(filter(None, [best_school_contact_first_name,
-                                                               best_school_contact_middle_name,
-                                                               best_school_contact_last_name]))
+        best_school_contact_email, best_school_contact_full_name = save_best_school_contact_info(soup)
 
-        best_school_contact_email = read_value(soup, "field_579")
-
-        principal_first_name = read_value(soup, "field_551_first")
-        principal_middle_name = read_value(soup, "field_551_middle")
-        principal_last_name = read_value(soup, "field_551_last")
-        principal_full_name = ' '.join(filter(None, [principal_first_name, principal_middle_name, principal_last_name]))
-
-        principal_email = read_value(soup, "field_555")
+        principal_email, principal_full_name = save_principal_info(soup)
 
         email_tup = create_message(username, best_school_contact_full_name, principal_full_name,
                                    best_school_contact_email,
                                    principal_email, child_first_name, child_last_name, school_name, child_pronoun)
 
         return email_tup, session
+
+
+def save_principal_info(soup):
+    principal_first_name = read_value(soup, "field_551_first")
+    principal_middle_name = read_value(soup, "field_551_middle")
+    principal_last_name = read_value(soup, "field_551_last")
+    principal_full_name = ' '.join(filter(None, [principal_first_name, principal_middle_name, principal_last_name]))
+    principal_email = read_value(soup, "field_555")
+    return principal_email, principal_full_name
+
+
+def save_child_info(soup):
+    child_first_name = read_value(soup, "field_2_first")
+    child_middle_name = read_value(soup, "field_2_middle")
+    child_last_name = read_value(soup, "field_2_last")
+    child_full_name = ' '.join(filter(None, [child_first_name, child_middle_name, child_last_name]))
+    child_sex = read_value(soup, "field_8")
+    if child_sex == "Female":
+        child_pronoun = "she"
+    else:
+        child_pronoun = "he"
+    return child_first_name, child_last_name, child_pronoun
+
+
+def get_child_report(ids, session):
+    # Report ID for the first record in the row
+    report_id = ids[next(iter(ids.keys()))]
+    # Setup for full report request
+    url = "https://apricot.socialsolutions.com/document/edit/id/" + report_id
+    session.headers.update({'Referer': "https://apricot.socialsolutions.com/auth/approved"})
+    response = session.get(url)
+    return response
+
+
+def save_best_school_contact_info(soup):
+    best_school_contact_first_name = read_value(soup, "field_573_first")
+    best_school_contact_middle_name = read_value(soup, "field_573_middle")
+    best_school_contact_last_name = read_value(soup, "field_573_last")
+    best_school_contact_full_name = ' '.join(filter(None, [best_school_contact_first_name,
+                                                           best_school_contact_middle_name,
+                                                           best_school_contact_last_name]))
+    best_school_contact_email = read_value(soup, "field_579")
+    return best_school_contact_email, best_school_contact_full_name
 
 
 def get_report_list(session):
@@ -156,18 +173,35 @@ def get_report_list(session):
 
 
 def get_report_json(session, username):
-    url = "https://apricot.socialsolutions.com/report/list"
-    # Get reports list
 
-    response = session.get(url)
-    # Get first name to identify report element
-    first_name = username.split(' ')[0]
+    response = get_all_reports_list(session)
+
+    user_report_path = get_users_report(response, username)
+
+    section_id, state_id = get_awaiting_intro_email_section_id(session, user_report_path)
+
+    response = get_awaiting_into_email_report(response, section_id, session, state_id)
+
+    # Create a lovely soup of the report response
     soup = BeautifulSoup(response.text, 'html.parser')
-    pattern = re.compile(".*" + first_name + "'s (Report|Caseload).*")
-    # Get link to report for username
-    report_path = list(filter(lambda item: pattern.search(item.text.strip()), soup.find_all('h4')))[0].findNext('a')[
-        'href']
-    url = "https://apricot.socialsolutions.com" + report_path
+
+    # Grab the JSON from the report response
+    report_json = json.loads(soup.find(id="section_" + section_id + "_json").get('data-json'))
+
+    return report_json, session
+
+
+def get_awaiting_into_email_report(response, section_id, session, state_id):
+    # Setup for the report post
+    url = "https://apricot.socialsolutions.com/report/refresh/reloading/false"
+    session.headers.update({'Referer': "https://apricot.socialsolutions.com/bulletins/list"})
+    payload = "state_id=" + state_id + "&section_id=" + section_id + "&mode=run&in_bulletin=true&fetchNew=true"
+    response = session.post(url, data=payload)
+    return response
+
+
+def get_awaiting_intro_email_section_id(session, user_report_path):
+    url = "https://apricot.socialsolutions.com" + user_report_path
     response = session.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     state_id = soup.find('input', id='state_id')['value']
@@ -177,16 +211,25 @@ def get_report_json(session, username):
     for section in sections:
         if section['name'] == 'Awaiting School Intro Email ':
             section_id = section['id']
-    # Setup for the report post
-    url = "https://apricot.socialsolutions.com/report/refresh/reloading/false"
-    session.headers.update({'Referer': "https://apricot.socialsolutions.com/bulletins/list"})
-    payload = "state_id=" + state_id + "&section_id=" + section_id + "&mode=run&in_bulletin=true&fetchNew=true"
-    response = session.post(url, data=payload)
-    # Create a lovely soup of the report response
+    return section_id, state_id
+
+
+def get_users_report(response, username):
+    # Get first name to identify report element
+    first_name = username.split(' ')[0]
     soup = BeautifulSoup(response.text, 'html.parser')
-    # Grab the JSON from the report response
-    report_json = json.loads(soup.find(id="section_" + section_id + "_json").get('data-json'))
-    return report_json, session
+    pattern = re.compile(".*" + first_name + "'s (Report|Caseload).*")
+    # Get link to report for username
+    report_path = list(filter(lambda item: pattern.search(item.text.strip()), soup.find_all('h4')))[0].findNext('a')[
+        'href']
+    return report_path
+
+
+def get_all_reports_list(session):
+    url = "https://apricot.socialsolutions.com/report/list"
+    # Get reports list
+    response = session.get(url)
+    return response
 
 
 def authenticate(apricot_password, apricot_username, session):
