@@ -33,34 +33,43 @@ def read_template(filename):
     return Template(template_file_content)
 
 
+def red_wrap_and_make_editable(your_name, element_id):
+    return '{}{}{}{}{}'.format('<font color="red"><span id="', element_id, '_display_value" class="makeEditable">',
+                               your_name, "</span></font>")
+
+
 def red_wrap(your_name):
     return '{}{}{}'.format('<font color="red">', your_name, "</font>")
 
 
 def create_message(your_name, best_school_contact_full_name, principal_full_name,
                    best_school_contact_email, principal_email, child_first_name, child_last_name,
-                   school_name, child_pronoun):
+                   school_name, child_pronoun, new_addressee=""):
     message_template = read_template('message.txt')
 
-    addressee = get_addressee(best_school_contact_email, best_school_contact_full_name, principal_email,
-                              principal_full_name)
+    if new_addressee:
+        addressee = new_addressee
+    else:
+        addressee = get_addressee(best_school_contact_email, best_school_contact_full_name, principal_email,
+                                  principal_full_name)
 
     # add in the values to the message template
     message = message_template.substitute(YOUR_NAME=your_name, ADDRESSEE=addressee,
                                           CHILD_FULL_NAME=' '.join([child_first_name, child_last_name]),
                                           CHILD_FIRST_NAME=child_first_name,
                                           SCHOOL_NAME=school_name, CHILD_PRONOUN=child_pronoun)
-    marked_message = message_template.substitute(YOUR_NAME=red_wrap(your_name), ADDRESSEE=red_wrap(addressee),
+    marked_message = message_template.substitute(YOUR_NAME=red_wrap(your_name),
+                                                 ADDRESSEE=red_wrap_and_make_editable(addressee, "addressee"),
                                                  CHILD_FULL_NAME=red_wrap(
                                                      ' '.join([child_first_name, child_last_name])),
                                                  CHILD_FIRST_NAME=red_wrap(child_first_name),
                                                  SCHOOL_NAME=red_wrap(school_name),
                                                  CHILD_PRONOUN=red_wrap(child_pronoun))
 
-    email_address = get_email_address(best_school_contact_email, principal_email)
-
     child_name_for_subject = get_child_name_for_subject(child_first_name, child_last_name)
-    return email_address, message, child_name_for_subject, marked_message
+    return principal_email, principal_full_name, best_school_contact_email, best_school_contact_full_name, \
+           child_first_name, child_last_name, school_name, child_pronoun, message, child_name_for_subject, \
+           marked_message
 
 
 def get_addressee(best_school_contact_email, best_school_contact_full_name, principal_email, principal_full_name):
@@ -173,7 +182,6 @@ def get_report_list(session):
 
 
 def get_report_json(session, username):
-
     response = get_all_reports_list(session)
 
     user_report_path = get_users_report(response, username)
