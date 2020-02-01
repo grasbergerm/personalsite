@@ -67,7 +67,7 @@ def send_email_form():
         email_tup, requests_session = \
             scrape_reports.generate_email_params(username, apricot_username, apricot_password)
     except KeyError as ke:
-        return render_template('send_email_content.html', to_email="No emails left", message="", form=form)
+        return render_template('send_email_content.html', subject="No emails left", message="", form=form)
     except IndexError as ie:
         flash('There was a problem with your name or apricot credentials, please check your entries and try again.')
         return redirect(url_for('hopecam_form'))

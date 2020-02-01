@@ -55,17 +55,7 @@ def get_input_value(soup, field_id):
     return soup.find('input', id=field_id)['value']
 
 
-def update_connection_status(session, username):
-    import scrape_reports
-
-    report_json, session = scrape_reports.get_report_json(session, username)
-
-    connection_status_form_id = update_connection_status_info(report_json, session)
-
-    update_school_info(connection_status_form_id, report_json, session)
-
-
-def update_connection_status(session, username, principal_email, best_school_email):
+def update_connection_status(session, username, principal_email="", best_school_email=""):
     import scrape_reports
 
     report_json, session = scrape_reports.get_report_json(session, username)
@@ -195,11 +185,7 @@ def update_connection_status_info(report_json, session):
     return connection_status_form_id
 
 
-def update_school_info(connection_status_form_id, report_json, session):
-    update_school_info(connection_status_form_id, report_json, session, "", "")
-
-
-def update_school_info(connection_status_form_id, report_json, session, principal_email, best_contact_email):
+def update_school_info(connection_status_form_id, report_json, session, principal_email="", best_contact_email=""):
     school_info_form_id, school_info_url = get_url_for_school_info(report_json)
     response = session.get(school_info_url)
     soup = BeautifulSoup(response.text, 'html.parser')
