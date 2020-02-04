@@ -3,7 +3,20 @@
 {% block content %}
 <h1>Email</h1>
     <div>
-        To: {{ to_email }}
+        {% if principal_email|length %}
+        Principal Email: <font color="red"><span id="principal_email_address_display_value" class="makeEditable">{{ principal_email }}</span></font>
+        <br>
+        {% else %}
+        Principal Email: <font color="red"><span id="principal_email_address_display_value" class="makeEditable blank">Double click to add Principal Email</span></font>
+        <br>
+        {% endif %}
+        {% if best_contact_email|length %}
+        Best Contact Email: <font color="red"><span id="best_contact_email_address_display_value" class="makeEditable">{{ best_contact_email }}</span></font>
+        <br>
+        {% else %}
+        Best Contact Email: <font color="red"><span id="best_contact_email_address_display_value" class="makeEditable blank">Double click to add Best School Contact Email</span></font>
+        <br>
+        {% endif %}
         <br>
         Subject: {{ subject }}
         <br>
@@ -16,5 +29,10 @@
 <form action="{{ url_for('send_email_form') }}" method="post" novalidate>
     {{ form.csrf_token }}
     <p>{{ form.send_email() }}</p>
+    {{ form.principal_email_address }}
+    {{ form.best_contact_email_address }}
+    {{ form.addressee }}
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='editable.js')}}"></script>
 {% endblock %}

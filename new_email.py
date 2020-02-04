@@ -5,7 +5,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
 
-
 from bs4 import BeautifulSoup
 
 
@@ -56,13 +55,18 @@ def get_input_value(soup, field_id):
     return soup.find('input', id=field_id)['value']
 
 
-def update_connection_status(session, username):
+def update_connection_status(session, username, principal_email="", best_school_email=""):
     import scrape_reports
 
     report_json, session = scrape_reports.get_report_json(session, username)
 
-    connection_status_form_id, connection_status_url = get_url_for_connection_status(report_json)
+    connection_status_form_id = update_connection_status_info(report_json, session)
 
+    update_school_info(connection_status_form_id, report_json, session, principal_email, best_school_email)
+
+
+def update_connection_status_info(report_json, session):
+    connection_status_form_id, connection_status_url = get_url_for_connection_status(report_json)
     response = session.get(connection_status_url)
     soup = BeautifulSoup(response.text, 'html.parser')
     dupe_flag = get_input_value(soup, "dupeFlag")
@@ -120,10 +124,8 @@ def update_connection_status(session, username):
     else:
         field_716 = ""
     field_716_other = get_other_value(soup, "field_716_other")
-
     connection_status_update_url = "https://apricot.socialsolutions.com/document/save/form_id/{0}/parent_id/{1}/document_id/{2}".format(
         connection_status_form_id, parent_id, document_id)
-
     payload = {
         "form_id": str(connection_status_form_id),
         "dupeFlag": dupe_flag,
@@ -179,11 +181,12 @@ def update_connection_status(session, username):
         "field_716": field_716,
         "field_716_other": field_716_other,
     }
-
     session.post(connection_status_update_url, data=payload)
+    return connection_status_form_id
 
+
+def update_school_info(connection_status_form_id, report_json, session, principal_email="", best_contact_email=""):
     school_info_form_id, school_info_url = get_url_for_school_info(report_json)
-
     response = session.get(school_info_url)
     soup = BeautifulSoup(response.text, 'html.parser')
     dupe_flag = get_input_value(soup, "dupeFlag")
@@ -240,7 +243,10 @@ def update_connection_status(session, username):
     field_573_middle = get_input_value(soup, "field_573_middle")
     field_573_last = get_input_value(soup, "field_573_last")
     field_576 = get_input_value(soup, "field_576")
-    field_579 = get_input_value(soup, "field_579")
+    if best_contact_email:
+        field_579 = best_contact_email
+    else:
+        field_579 = get_input_value(soup, "field_579")
     field_580_p1 = get_input_value(soup, "field_580_p1")
     field_580_p2 = get_input_value(soup, "field_580_p2")
     field_580_p3 = get_input_value(soup, "field_580_p3")
@@ -248,7 +254,10 @@ def update_connection_status(session, username):
     field_551_first = get_input_value(soup, "field_551_first")
     field_551_middle = get_input_value(soup, "field_551_middle")
     field_551_last = get_input_value(soup, "field_551_last")
-    field_555 = get_input_value(soup, "field_555")
+    if principal_email:
+        field_555 = principal_email
+    else:
+        field_555 = get_input_value(soup, "field_555")
     field_559_p1 = get_input_value(soup, "field_559_p1")
     field_559_p2 = get_input_value(soup, "field_559_p2")
     field_559_p3 = get_input_value(soup, "field_559_p3")
@@ -297,10 +306,8 @@ def update_connection_status(session, username):
         field_629_showhide = "off"
     field_629 = get_input_value(soup, "field_629")
     field_629_link_count = get_input_value(soup, "field_629_link_count")
-
     school_info_update_url = "https://apricot.socialsolutions.com/document/save/form_id/{0}/parent_id/{1}/document_id/{2}".format(
         school_info_form_id, parent_id, document_id)
-
     payload = {
         "form_id": str(connection_status_form_id),
         "dupeFlag": dupe_flag,

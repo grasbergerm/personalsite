@@ -3,7 +3,7 @@ from urllib.parse import quote_plus
 from flask_basicauth import BasicAuth
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField
 from wtforms.validators import DataRequired
 
 import scrape_reports, new_email, os, smtplib
@@ -19,10 +19,13 @@ class HopecamForm(FlaskForm):
 
 
 class SendEmailForm(FlaskForm):
+    principal_email_address = HiddenField('principal_email_address')
+    best_contact_email_address = HiddenField('best_contact_email_address')
+    addressee = HiddenField('addressee')
     send_email = SubmitField('Send Email')
 
 
-app = Flask(__name__, static_url_path='', static_folder='')
+app = Flask(__name__, static_url_path='', static_folder='static')
 
 app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 # default auth values
@@ -64,32 +67,49 @@ def send_email_form():
         email_tup, requests_session = \
             scrape_reports.generate_email_params(username, apricot_username, apricot_password)
     except KeyError as ke:
-        return render_template('send_email_content.html', to_email="No emails left", message="", form=form)
+        return render_template('send_email_content.html', subject="No emails left", message="", form=form)
     except IndexError as ie:
         flash('There was a problem with your name or apricot credentials, please check your entries and try again.')
         return redirect(url_for('hopecam_form'))
-    email_address, email_message, email_subject, marked_message = email_tup
+    principal_email, principal_full_name, best_contact_email, best_contact_full_name, child_first_name, \
+    child_last_name, school_name, child_pronoun, email_message, email_subject, marked_message = email_tup
 
     if form.validate_on_submit():
         outlook_username = session.get('outlook_username')
         outlook_password = session.get('outlook_password')
+        if form.addressee.data:
+            email_message = scrape_reports.create_message(username, best_contact_full_name, principal_full_name,
+                                                          best_contact_email, principal_email, child_first_name,
+                                                          child_last_name, school_name, child_pronoun,
+                                                          form.addressee.data)
+        elif form.best_contact_email_address.data:
+            best_contact_email = form.best_contact_email_address.data
+        elif form.principal_email_address.data:
+            principal_email = form.principal_email_address.data
         try:
+            email_address = scrape_reports.get_email_address(principal_email, best_contact_email)
             new_email.send_email(outlook_username, outlook_password, email_address, email_message,
                                  email_subject)
         except smtplib.SMTPRecipientsRefused as sr:
             flash("No Email Receipients! Please update the Child's School Information")
-            return render_template('send_email_content.html', to_email=email_address,
+            return render_template('send_email_content.html', principal_email=principal_email,
+                                   best_contact_email=best_contact_email,
                                    message=email_message.split('\n'), form=form)
         except smtplib.SMTPException as se:
             flash(Markup('There was a problem with your email, please check your credentials back at <a href="' +
                          url_for('hopecam_form') + '" class="alert-link">/hopecam</a>'))
-            return render_template('send_email_content.html', to_email=email_address,
+            return render_template('send_email_content.html', principal_email=principal_email,
+                                   best_contact_email=best_contact_email,
                                    message=email_message.split('\n'), form=form)
         flash('Email sent!')
-        new_email.update_connection_status(requests_session, username)
+        if form.best_contact_email_address.data or form.principal_email_address.data:
+            new_email.update_connection_status(requests_session, username, principal_email, best_contact_email)
+        else:
+            new_email.update_connection_status(requests_session, username)
         return redirect(url_for('send_email_form'))
 
-    return render_template('send_email_content.html', to_email=email_address, subject=email_subject,
+    return render_template('send_email_content.html', principal_email=principal_email,
+                           best_contact_email=best_contact_email, subject=email_subject,
                            message=marked_message.split('\n'), form=form)
 
 
