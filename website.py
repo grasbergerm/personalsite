@@ -118,9 +118,9 @@ def home():
     return render_template('index.html')
 
 
-@app.route("/blogs")
+@app.route("/writings")
 def blogs():
-    return render_template('blogs.html')
+    return render_template('writings.html')
 
 
 if __name__ == "__main__":
