@@ -71,7 +71,7 @@ def send_email_form():
     except IndexError as ie:
         flash('There was a problem with your name or apricot credentials, please check your entries and try again.')
         return redirect(url_for('hopecam_form'))
-    principal_email, principal_full_name, best_contact_email, best_contact_full_name, child_first_name, \
+    principal_email, principal_full_name, best_contact_email, best_contact_full_name, parent_email, child_first_name, \
     child_last_name, school_name, child_pronoun, email_message, email_subject, marked_message = email_tup
 
     if form.validate_on_submit():
@@ -79,8 +79,8 @@ def send_email_form():
         outlook_password = session.get('outlook_password')
         if form.addressee.data:
             email_message = scrape_reports.create_message(username, best_contact_full_name, principal_full_name,
-                                                          best_contact_email, principal_email, child_first_name,
-                                                          child_last_name, school_name, child_pronoun,
+                                                          best_contact_email, principal_email, parent_email,
+                                                          child_first_name, child_last_name, school_name, child_pronoun,
                                                           form.addressee.data)
         elif form.best_contact_email_address.data:
             best_contact_email = form.best_contact_email_address.data
@@ -88,19 +88,21 @@ def send_email_form():
             principal_email = form.principal_email_address.data
         try:
             email_address = scrape_reports.get_email_address(principal_email, best_contact_email)
-            new_email.send_email(outlook_username, outlook_password, email_address, email_message,
+            new_email.send_email(outlook_username, outlook_password, email_address, parent_email, email_message,
                                  email_subject)
         except smtplib.SMTPRecipientsRefused as sr:
+            app.logger.info(sr)
             flash("No Email Receipients! Please update the Child's School Information")
             return render_template('send_email_content.html', principal_email=principal_email,
-                                   best_contact_email=best_contact_email,
-                                   message=email_message.split('\n'), form=form)
+                                   best_contact_email=best_contact_email, parent_email=parent_email,
+                                   subject=email_subject, message=email_message.split('\n'), form=form)
         except smtplib.SMTPException as se:
+            app.logger.info(se)
             flash(Markup('There was a problem with your email, please check your credentials back at <a href="' +
                          url_for('hopecam_form') + '" class="alert-link">/hopecam</a>'))
             return render_template('send_email_content.html', principal_email=principal_email,
-                                   best_contact_email=best_contact_email,
-                                   message=email_message.split('\n'), form=form)
+                                   best_contact_email=best_contact_email, parent_email=parent_email,
+                                   subject=email_subject, message=email_message.split('\n'), form=form)
         flash('Email sent!')
         if form.best_contact_email_address.data or form.principal_email_address.data:
             new_email.update_connection_status(requests_session, username, principal_email, best_contact_email)
@@ -109,7 +111,7 @@ def send_email_form():
         return redirect(url_for('send_email_form'))
 
     return render_template('send_email_content.html', principal_email=principal_email,
-                           best_contact_email=best_contact_email, subject=email_subject,
+                           best_contact_email=best_contact_email, parent_email=parent_email, subject=email_subject,
                            message=marked_message.split('\n'), form=form)
 
 

@@ -17,6 +17,10 @@
         Best Contact Email: <font color="red"><span id="best_contact_email_address_display_value" class="makeEditable blank">Double click to add Best School Contact Email</span></font>
         <br>
         {% endif %}
+        {% if parent_email|length %}
+        Parent Email to be CC'd: <font color="red"><span id="parent_email_address_display_value" class="makeEditable">{{ parent_email }}</span></font>
+        <br>
+        {% endif %}
         <br>
         Subject: {{ subject }}
         <br>

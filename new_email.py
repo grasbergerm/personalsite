@@ -8,7 +8,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 
-def send_email(outlook_username, outlook_password, to_address, message, child_name_for_email_subject):
+def send_email(outlook_username, outlook_password, to_address, cc_parent, message, child_name_for_email_subject):
     s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
     s.starttls()
     s.login(outlook_username, outlook_password)
@@ -19,6 +19,7 @@ def send_email(outlook_username, outlook_password, to_address, message, child_na
     recipients = to_address
     msg['From'] = outlook_username
     msg['To'] = ", ".join(recipients)
+    msg['Cc'] = cc_parent
     msg['Subject'] = "Hopecam Connection for " + child_name_for_email_subject
 
     # add in the message body

@@ -43,7 +43,7 @@ def red_wrap(your_name):
 
 
 def create_message(your_name, best_school_contact_full_name, principal_full_name,
-                   best_school_contact_email, principal_email, child_first_name, child_last_name,
+                   best_school_contact_email, principal_email, parent_email, child_first_name, child_last_name,
                    school_name, child_pronoun, new_addressee=""):
     message_template = read_template('message.txt')
 
@@ -68,8 +68,8 @@ def create_message(your_name, best_school_contact_full_name, principal_full_name
 
     child_name_for_subject = get_child_name_for_subject(child_first_name, child_last_name)
     return principal_email, principal_full_name, best_school_contact_email, best_school_contact_full_name, \
-           child_first_name, child_last_name, school_name, child_pronoun, message, child_name_for_subject, \
-           marked_message
+           parent_email, child_first_name, child_last_name, school_name, child_pronoun, message, \
+           child_name_for_subject, marked_message
 
 
 def get_addressee(best_school_contact_email, best_school_contact_full_name, principal_email, principal_full_name):
@@ -114,6 +114,8 @@ def generate_email_params(username, apricot_username, apricot_password):
 
         school_info_form_id, school_info_url = new_email.get_url_for_school_info(report_json)
 
+        parent_email = save_parent_email(soup)
+
         response = session.get(school_info_url)
 
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -126,9 +128,13 @@ def generate_email_params(username, apricot_username, apricot_password):
 
         email_tup = create_message(username, best_school_contact_full_name, principal_full_name,
                                    best_school_contact_email,
-                                   principal_email, child_first_name, child_last_name, school_name, child_pronoun)
+                                   principal_email, parent_email, child_first_name, child_last_name, school_name, child_pronoun)
 
         return email_tup, session
+
+
+def save_parent_email(soup):
+    return read_value(soup, "field_122")
 
 
 def save_principal_info(soup):
