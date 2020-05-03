@@ -1,5 +1,5 @@
 @import url("font-awesome.min.css");
-@import url("http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic|Source+Code+Pro:400");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic|Source+Code+Pro:400");
 
 /*
 	Read Only by HTML5 UP
@@ -1555,7 +1555,7 @@
 	}
 
 	body, input, select, textarea {
-		color: #888;
+		color: #989898;
 		font-family: "Lato", sans-serif;
 		font-size: 16pt;
 		font-weight: 400;
@@ -1574,7 +1574,7 @@
 
 		a:hover {
 			border-bottom-color: transparent;
-			color: #989898 !important;
+			color: #f1f1f1 !important;
 		}
 
 	strong, b {
@@ -1591,7 +1591,7 @@
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #777;
+		color: #989898;
 		font-weight: 700;
 		line-height: 1em;
 		margin: 0 0 0.5625em 0;
@@ -1726,12 +1726,11 @@
 	}
 
 	header.major h2 {
-		color: #555b5e;
+		color: #989898;
 		font-size: 3.5em;
 	}
 
 		header.major h2 + p {
-			color: #777;
 			font-size: 1.75em;
 			font-weight: 700;
 			margin-top: -0.75em;
@@ -1893,7 +1892,7 @@
 		input[type="radio"]:checked + label:before {
 			background: #989898;
 			border-color: #989898;
-			color: #345f99;
+			color: #16588e;
 			content: '\f00c';
 		}
 
@@ -1981,6 +1980,18 @@
 		.icon > .label {
 			display: none;
 		}
+
+/* Google Doc */
+	#google-doc {
+		overflow:hidden;
+		height:100vh;
+		width:100%
+	}
+
+/* Project Links */
+	.project {
+		border-bottom: none;
+	}
 
 /* Image */
 
@@ -2092,9 +2103,9 @@
 				}
 
 				ul.feature-icons li:before {
-					background: #555b5e;
+					background: #989898;
 					border-radius: 100%;
-					color: #345f99;
+					color: #16588e;
 					display: block;
 					height: 2.5em;
 					left: 0;
@@ -2280,7 +2291,7 @@
 		background-color: #989898;
 		border-radius: 5px;
 		border: 0;
-		color: #345f99 !important;
+		color: #16588e !important;
 		cursor: pointer;
 		display: inline-block;
 		font-weight: 700;
@@ -2297,7 +2308,7 @@
 		input[type="button"]:hover,
 		.button:hover {
 			background-color: #a5a5a5;
-			color: #345f99 !important;
+			color: #16588e !important;
 		}
 
 		input[type="submit"]:active,
@@ -2380,7 +2391,7 @@
 		input[type="button"].special,
 		.button.special {
 			background-color: #555b5e;
-			color: #345f99 !important;
+			color: #16588e !important;
 		}
 
 			input[type="submit"].special:hover,
@@ -2414,13 +2425,11 @@
 /* Features */
 
 	.features article {
-		border-top: solid 3px #f4f4f4;
 		margin-bottom: 2.25em;
 		padding-top: 2.25em;
 	}
 
 		.features article:first-child {
-			border-top: 0;
 			padding-top: 0;
 		}
 
@@ -2449,8 +2458,8 @@
 /* Header */
 
 	#header {
-		background-image: url(../../images/pic04.jpg);
-		color: #345f99;
+		background-color: #d4d5da;
+		color: #16588e;
 		height: 100%;
 		position: fixed;
 		text-align: center;
@@ -2460,23 +2469,23 @@
 	}
 
 		#header h1, #header h2, #header h3, #header h4, #header h5, #header h6 {
-			color: #345f99;
+			color: #16588e;
 		}
 
 			#header h1 a, #header h2 a, #header h3 a, #header h4 a, #header h5 a, #header h6 a {
-				color: #345f99;
+				color: #16588e;
 			}
 
 		#header header p {
-			color: #345f99;
+			color: #16588e;
 		}
 
 		#header a {
-			color: #345f99;
+			color: #16588e;
 		}
 
 			#header a:hover {
-				color: #345f99 !important;
+				color: #16588e !important;
 			}
 
 		#header > header {
@@ -2495,7 +2504,7 @@
 			}
 
 			#header > header p {
-				color: #345f99;
+				color: #16588e;
 				font-style: italic;
 				margin: 1em 0 0 0;
 			}
@@ -2513,7 +2522,7 @@
 			}
 
 				#header > footer .icons li a {
-					color: #345f99;
+					color: #16588e;
 				}
 
 		#header > nav ul {
@@ -2523,7 +2532,6 @@
 		}
 
 			#header > nav ul li {
-				border-top: solid 2px #4d4d4d;
 				display: block;
 				padding: 0;
 			}
@@ -2534,7 +2542,7 @@
 					-ms-transition: none;
 					transition: none;
 					border: 0;
-					color: #345f99 !important;
+					color: #16588e !important;
 					display: block;
 					padding: 0.85em 0;
 					text-decoration: none;
@@ -2552,24 +2560,15 @@
 /* Wrapper */
 
 	#wrapper {
-		background: #f2f2f2;
+		background: #ffffff;
 		padding-right: 23em;
 	}
 
 /* Main */
 
-	#main > section {
-		border-top: solid 6px #f4f4f4;
-	}
-
 		#main > section > .container {
 			padding: 6em 0 4em 0;
 		}
-
-		#main > section:first-child {
-			border-top: 0;
-		}
-
 
 /* Footer */
 
@@ -2810,7 +2809,7 @@
 
 					#titleBar .toggle:before {
 						background: #555b5e;
-						color: #345f99;
+						color: #16588e;
 						content: '\f0c9';
 						display: block;
 						font-size: 18px;

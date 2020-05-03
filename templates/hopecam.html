@@ -1,0 +1,45 @@
+{% extends "hopecam_base.html" %}
+
+{% block content %}
+    <h1>Your Info</h1>
+    <form action="" method="post" novalidate>
+        {{ form.csrf_token }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.apricot_username.label }}<br>
+            {{ form.apricot_username(size=32) }}
+            {% for error in form.apricot_username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.apricot_password.label }}<br>
+            {{ form.apricot_password(size=32) }}
+            {% for error in form.apricot_password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.outlook_username.label }}<br>
+            {{ form.outlook_username(size=32) }}
+            {% for error in form.outlook_username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.outlook_password.label }}<br>
+            {{ form.outlook_password(size=32) }}
+            {% for error in form.outlook_password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
